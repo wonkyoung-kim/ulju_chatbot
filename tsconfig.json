@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noImplicitAny": false, // any 타입을 허용
+    "jsx": "preserve",
+    "types": ["node", "webpack-env"],
+    "typeRoots": ["./node_modules/@types", "../@types", "./types"],
+    "baseUrl": "src",
+    "paths": {
+      "ui-component": ["component/ui-component"],
+      "ui-component/*": ["component/ui-component/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

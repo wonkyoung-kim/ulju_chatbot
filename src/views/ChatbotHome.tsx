@@ -61,11 +61,18 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
     // 기본 응답 메시지
     const cards = result?.basicCard ?? [];
     cards.forEach(card => {
+      const validButtons = (card.buttons ?? [])
+              .filter(b => b.title && b.openUriAction?.uri && !b.openUriAction.uri.startsWith('null'))
+              .map(b => ({
+                title: b.title!,
+                uri: b.openUriAction!.uri!
+              }));
       addMessage({
         id: uuidv4(),
         type: 'card',
         title: card.title,
         content: card.formattedText,
+        buttons: validButtons.length > 0 ? validButtons : undefined,
         sender: 'bot',
         timestamp: new Date().toISOString()
       });
@@ -76,7 +83,7 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
       addMessage({
         id: uuidv4(),
         type: 'button',
-        buttons: suggestions,
+        button: suggestions,
         sender: 'bot',
         timestamp: new Date().toISOString()
       });
@@ -314,6 +321,24 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
               <Typography variant="body2" whiteSpace="pre-line">
                 {msg.content}
               </Typography>
+              {/* 버튼이 있을 경우 */}
+              {msg.buttons && msg.buttons.length > 0 && (
+                <Box mt={1} display="flex" flexWrap="wrap" gap={1}>
+                  {msg.buttons.map((btn, i) => (
+                    <Button
+                      key={i}
+                      variant="outlined"
+                      size="small"
+                      href={btn.uri}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {btn.title || '열기'}
+                    </Button>
+                  ))}
+                </Box>
+              )}
             </Paper>
           )}
 
@@ -332,7 +357,7 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
                 boxShadow: '0px 2px 4px rgba(0,0,0,0.1)'
               }}
             >
-              {msg.buttons?.map((btn, i) => (
+              {msg.button?.map((btn, i) => (
                 <Box
                   key={i}
                   onClick={() => {

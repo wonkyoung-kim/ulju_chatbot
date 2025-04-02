@@ -73,7 +73,9 @@ export interface ChatMessage {
   type: MessageType;
   content?: string;
   title?: string;
-  buttons?: string[];
+  buttons?: { title: string; uri: string }[];
+  button?: string[];
+  image?: string;
   sender: 'user' | 'bot';
   timestamp: string;
 }

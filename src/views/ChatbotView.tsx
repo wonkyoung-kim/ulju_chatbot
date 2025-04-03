@@ -394,10 +394,8 @@ export default function  ChatbotView ({ pageKind }: PageKindProps) {
                               </ul>
                               {/* 버튼이 있을 경우 */}
                               {msg.buttons && msg.buttons.length > 0 && (
-                              <div className="msg md">
-                              <ul className="btn-list">
+                              <div className="md">
                                   {msg.buttons.map((btn, i) => (
-                                    <li>
                                       <button 
                                         className="btn-default"
                                           key={i}
@@ -407,9 +405,9 @@ export default function  ChatbotView ({ pageKind }: PageKindProps) {
                                       >
                                         {btn.title}
                                       </button>
-                                    </li>
+                               
                                   ))}
-                                </ul>
+                              
                                 </div>
                               )}
                             </div>

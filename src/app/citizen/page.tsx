@@ -2,13 +2,15 @@
 'use client';
 import React from 'react';
 import { Box } from '@mui/material';
-import ChatbotHome from '../../views/ChatbotHome';
-import {pageKind} from '../../constants/constant';
+import ChatbotView from 'views/ChatbotView';
+import Header from 'views/Header';
+import {pageKind} from 'constants/constant';
 
 export default function ChatPage() {
   return (
     <Box p={2}>
-      <ChatbotHome
+      <Header />
+      <ChatbotView
         pageKind={pageKind.citizen} />
     </Box>
   );

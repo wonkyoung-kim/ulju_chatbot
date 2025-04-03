@@ -1,0 +1,89 @@
+@import url("./reset.css");
+
+input[type="text"] {
+  max-width: 100%;
+  width: 100%;
+  padding: 1.2rem 1.6rem;
+  border: 0.1rem solid #dde4ef;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+}
+textarea {
+  max-width: 100%;
+  width: 100%;
+  padding: 1.2rem 1.6rem;
+  border: 0.1rem solid #dde4ef;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  resize: none;
+}
+
+.input-text {
+  margin-bottom: 1.6rem;
+}
+.input-text:last-of-type {
+  margin-bottom: 0;
+}
+.input-label {
+  display: block;
+  padding-bottom: 0.4rem;
+  font-size: 1.4rem;
+  color: #555555;
+}
+.input-label.require::before {
+  content: "*";
+  margin-right: 0.4rem;
+  font-size: 1.4rem;
+  color: #ff0000;
+}
+
+.btn-group {
+  display: flex;
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+.btn {
+  flex: 1;
+  min-height: 4.8rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  color: #ffffff;
+}
+.btn.gray {
+  background-color: #8895ad;
+}
+.btn.blue {
+  background-color: #0077ff;
+}
+
+.num-list {
+  counter-reset: counter;
+}
+.num-list li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+.num-list li::before {
+  counter-increment: counter;
+  content: counter(counter) ".";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.dot-list {
+}
+.dot-list li {
+  position: relative;
+  padding-left: 1rem;
+}
+.dot-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.8rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 50%;
+  background-color: #000;
+}

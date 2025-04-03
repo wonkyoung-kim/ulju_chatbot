@@ -1,0 +1,291 @@
+@import url("./common.css");
+
+/* 공통 */
+.popup-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+.popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  background-color: #ffffff;
+}
+.popup-header {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  padding: 1.2rem;
+  background-color: #f2f7fa;
+}
+.popup-header .title {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-weight: 600;
+  font-size: 1.8rem;
+  color: #333333;
+}
+.popup-header .title .icon {
+  display: inline-block;
+  width: 2rem;
+  height: 2.2rem;
+}
+.popup-header .btn-close {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  background-image: url("/assets/images/close_icon.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+.popup-contents {
+  max-height: 72rem;
+  height: 100%;
+  padding: 1.6rem;
+  overflow-y: auto;
+}
+
+.popup.dialog {
+  width: auto;
+}
+.popup.dialog .popup-contents {
+  padding: 2rem;
+  font-size: 1.6rem;
+  color: #333;
+}
+.popup.dialog .btn-group {
+  margin-top: 0;
+  border-radius: 0;
+}
+
+.webtoon-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+.webtoon-container .webtoon-header {
+  position: relative;
+  height: 4rem;
+}
+.webtoon-container .webtoon-header .btn-close {
+  position: absolute;
+  right: 0.8rem;
+  top: 0.6rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  background-image: url("/assets/images/close_w_icon.png");
+  background-repeat: no-repeat;
+  background-size: 1.6rem;
+  background-position: center;
+}
+.webtoon-container .webtoon-view {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+.webtoon-container .webtoon-view .img {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow-y: scroll;
+}
+.webtoon-container .webtoon-view .img::-webkit-scrollbar {
+  display: none;
+}
+
+/* 공지사항 팝업 */
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.notice-list li {
+  padding: 1.2rem;
+  border: 0.1rem solid #dde4ef;
+  border-radius: 1.2rem;
+  font-size: 1.6rem;
+}
+
+/* 교육모드 팝업 */
+.notice-popup {
+  height: 80%;
+}
+.education-list {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+}
+.education-list li {
+  max-width: 37rem;
+  width: 100%;
+  border: 0.1rem solid #333333;
+  border-radius: 1.2rem;
+}
+.education-list li a {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1.8rem 2rem;
+  font-weight: 500;
+  font-size: 2rem;
+  color: #333333;
+}
+.education-list li a .icon {
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+/* 주요일정 팝업 */
+.schedule-contents {
+  background-color: #dde4ef;
+}
+.schedule-list li + li {
+  margin-top: 1.6rem;
+}
+.schedule-list .schedule-card {
+  padding: 1.6rem;
+  border-radius: 1.2rem;
+  box-shadow: 0.2rem 0.2rem 1.2rem 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+.schedule-list .schedule-card h4 {
+  text-align: center;
+  font-weight: 500;
+  font-size: 2rem;
+  color: #333333;
+}
+.schedule-list .schedule-card table {
+  width: 100%;
+  margin-top: 1.2rem;
+  border: 0.1rem solid #dde4ef;
+  font-size: 1.6rem;
+  color: #555;
+}
+.schedule-list .schedule-card table tr {
+  border-bottom: 0.1rem solid #dde4ef;
+}
+.schedule-list .schedule-card table th {
+  width: 10.2rem;
+  padding: 0.8rem 1.6rem;
+  background-color: #f2f7fa;
+}
+.schedule-list .schedule-card table td {
+  padding: 0.8rem 1.6rem;
+}
+.schedule-list .schedule-card table td .scroll-box {
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+/* 상황신고 팝업 */
+.report-contents {
+  background-color: #dde4ef;
+}
+.report-swiper-container {
+  overflow: hidden;
+  margin: 0 -1.6rem;
+  padding-bottom: 3.2rem;
+}
+.report-swiper-container .report-swiper {
+  width: 80%;
+  height: 22rem;
+  overflow: visible;
+}
+.report-swiper-container .report-swiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  background-color: #f0faff;
+}
+.report-swiper-container .report-swiper .swiper-slide .img-container {
+  width: 100%;
+  height: 100%;
+}
+.report-swiper-container .report-swiper .swiper-slide .img {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+.report-swiper-container .report-swiper .swiper-slide .img img {
+  object-fit: contain;
+  height: 100%;
+}
+.report-swiper-container .report-swiper .swiper-slide .img-container .btn-delete {
+  display: block;
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  background-image: url("/assets/images/swiper_delete_icon.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+.report-swiper-container .report-swiper .swiper-slide .btn-add {
+  display: inline-block;
+  width: 12rem;
+  height: 12rem;
+  background-image: url("/assets/images/swiper_plus_icon.png");
+  background-repeat: no-repeat;
+  background-size: 6rem;
+  background-position: center;
+}
+.report-swiper-container .report-swiper .swiper-pagination {
+  bottom: -2rem;
+  line-height: 1;
+}
+.form-card {
+  padding: 1.6rem;
+  border-radius: 1.2rem;
+  box-shadow: 0.2rem 0.2rem 1.2rem 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+.btn-group {
+  margin-top: 1.6rem;
+}
+
+@media (max-width: 1000px) {
+  .popup {
+    left: 0;
+    top: 0;
+    height: 100%;
+    transform: none;
+    max-width: 100%;
+    border-radius: 0;
+  }
+  .popup-contents {
+    max-height: calc(100vh - 5.1rem);
+    height: 100%;
+  }
+  .popup.dialog {
+    width: auto;
+    height: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1.2rem;
+  }
+}

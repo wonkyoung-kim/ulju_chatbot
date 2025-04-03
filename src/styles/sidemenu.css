@@ -1,0 +1,118 @@
+@import url("./common.css");
+
+.side-menu {
+  position: fixed;
+  z-index: 99;
+  width: 30rem;
+  height: 100%;
+  margin-top: 5.6rem;
+  box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.25);
+  background-color: #ebf3ff;
+}
+.side-menu h2 {
+  height: 6.4rem;
+  line-height: 6.4rem;
+  text-align: center;
+  border-bottom: 0.2rem solid #dde4ef;
+  font-weight: 500;
+  font-size: 1.8rem;
+}
+.side-menu ul {
+  overflow-y: auto;
+  height: 100%;
+  padding: 3rem 4rem;
+}
+.side-menu li {
+  height: 6.8rem;
+  margin-bottom: 1.2rem;
+}
+.side-menu li button {
+  display: flex;
+  align-items: center;
+  gap: 2.8rem;
+  width: 100%;
+  height: 100%;
+  font-weight: 500;
+  font-size: 1.6rem;
+}
+.side-menu li button::before {
+  content: "";
+  width: 2.8rem;
+  height: 2.8rem;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+.side-menu li.menu1 button::before {
+  background-image: url("/assets/images/menu/menu_load_info.png");
+}
+.side-menu li.menu2 button::before {
+  background-image: url("/assets/images/menu/menu_safe_area_check.png");
+}
+.side-menu li.menu3 button::before {
+  background-image: url("/assets/images/menu/menu_safety_map.png");
+}
+.side-menu li.menu4 button::before {
+  background-image: url("/assets/images/menu/menu_education.png");
+}
+.side-menu li.menu5 button::before {
+  background-image: url("/assets/images/menu/menu_schedule.png");
+}
+.side-menu li.menu6 button::before {
+  background-image: url("/assets/images/menu/menu_summary.png");
+}
+.side-menu li.menu7 button::before {
+  background-image: url("/assets/images/menu/menu_report_calamity.png");
+}
+.side-menu li.menu8 button::before {
+  background-image: url("/assets/images/menu/menu_register.png");
+}
+.side-menu li.menu9 button::before {
+  background-image: url("/assets/images/menu/menu_text_size_up.png");
+}
+
+@media (max-width: 1000px) {
+  .side-menu {
+    position: absolute;
+    left: 0;
+    bottom: 4.8rem;
+    z-index: 90;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    border-radius: 2rem 2rem 0 0;
+    box-shadow: 0 -0.2rem 2rem 0 rgba(0, 0, 0, 0.1);
+    background-color: #1e75e7;
+  }
+  .side-menu h2 {
+    display: none;
+  }
+  .side-menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  .side-menu li {
+    width: 33.33%;
+    height: auto;
+    padding: 2.2rem 0;
+    border-bottom: 0.1rem solid #005fcc;
+    border-right: 0.1rem solid #005fcc;
+    margin-bottom: 0;
+  }
+  .side-menu li button {
+    display: block;
+    gap: 0.4rem;
+    font-size: 1.6rem;
+    color: #ffffff;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .side-menu li button::before {
+    display: block;
+    width: 3.2rem;
+    height: 3.2rem;
+    margin: 0 auto 0.4rem;
+  }
+}

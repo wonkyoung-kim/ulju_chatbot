@@ -20,6 +20,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isTextScaledUp, setIsTextScaledUp] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -246,6 +247,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
         };
         addMessage(userMsg);
         //mutation.mutate(value);
+        setIsLoading(true);
         answerMessage(value);
         if (inputRef.current) inputRef.current.value = '';
     };
@@ -311,6 +313,8 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
             if (process.env.NODE_ENV !== 'production') {
                 console.error('Failed to fetch answerMessage:', error);
             }
+        } finally {
+            setIsLoading(false);
         }
     };
     // ##############################################################################################
@@ -342,6 +346,8 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
             if (process.env.NODE_ENV !== 'production') {
                 console.error('Failed to fetch answerMessage:', error);
             }
+        } finally {
+            setIsLoading(false);
         }
     };
     // ##############################################################################################
@@ -466,6 +472,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                                                     timestamp: new Date().toISOString(),
                                                                 };
                                                                 addMessage(userMsg);
+                                                                setIsLoading(true);
                                                                 suggestionMessage(btn);
                                                             }}
                                                         >
@@ -479,6 +486,21 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                 )}
                             </React.Fragment>
                         ))}
+
+                        {/* Loading indicator */}
+                        {isLoading && (
+                            <div className="bot-message">
+                                <span className="name">안전 네비게이션</span>
+                                <div className="msg">
+                                    <div className="loading">
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                        <div className="dot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div ref={messagesEndRef} />
                     </div>
 

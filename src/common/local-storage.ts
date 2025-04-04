@@ -42,15 +42,14 @@ function getUljusafeSessionId() {
     return uljusafeSessionId;
 }
 
-// 큰큰폰트 여부 가져오기
+// 큰폰트 여부 가져오기
 function setBigFontTF(tf: boolean) {
-    const tfStr = tf ? 'true' : 'false';
-    window.localStorage.setItem('PREVIOUS_SEARCH_TEXT', tfStr);
+    window.localStorage.setItem('BIG_FONT_TF', tf ? 'true' : 'false');
 }
 
-// 큰큰폰트 여부 가져오기
+// 큰폰트 여부 가져오기
 function getBigFontTF() {
-    const bigFontTF = window.localStorage.getItem('PREVIOUS_SEARCH_TEXT');
+    const bigFontTF = window.localStorage.getItem('BIG_FONT_TF');
     if (bigFontTF === 'true') {
         return true;
     } else {

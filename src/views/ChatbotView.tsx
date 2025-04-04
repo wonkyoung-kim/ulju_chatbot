@@ -332,9 +332,10 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                     isOpen={isSideMenuOpen}
                     onClose={closeSideMenu}
                     onTextScaleChange={setIsTextScaledUp} // 글씨 크기 변경 함수 전달
+                    pageKind={pageKind}
                 />
             ) : (
-                <SideMenu isOpen={true} onClose={closeSideMenu} onTextScaleChange={setIsTextScaledUp} />
+                <SideMenu isOpen={true} onClose={closeSideMenu} onTextScaleChange={setIsTextScaledUp} pageKind={pageKind} />
             )}
 
             <main className="chatbot-container">

@@ -8,7 +8,7 @@ import { pageKind } from 'constants/constant';
 export default function ChatPage() {
     return (
         <Box p={2}>
-            <Header />
+            <Header pageKind={pageKind.citizen} />
             <ChatbotView pageKind={pageKind.citizen} />
         </Box>
     );

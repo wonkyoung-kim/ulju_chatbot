@@ -27,6 +27,13 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     const isInitialized = useRef(false);
     const [latitude, setLatitude] = useState(0); // 위도
     const [longitude, setLongitude] = useState(0); // 경도
+    const [param, setParam] = useState(''); // 답변으로 넘어온 param값값
+
+    const isLocal = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+    const imgAddUrl = isLocal ? 'https://uljusafe.uljudata.or.kr' : '';
+    if (isLocal) {
+        console.log('################ 로컬환경 ################');
+    }
 
     // 화면 크기 변경 감지 (1000px 미만일 때만 버튼 보이게)
     useEffect(() => {
@@ -111,6 +118,9 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 id: uuidv4(),
                 type: 'card',
                 title: card.title,
+                subtitle: card.subtitle,
+                image: card.image?.imageUri,
+                imageAlt: card.image?.accessibilityText,
                 content: card.formattedText,
                 buttons: validButtons.length > 0 ? validButtons : undefined,
                 sender: 'bot',
@@ -128,6 +138,8 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 timestamp: new Date().toISOString(),
             });
         }
+        console.log('########## param ############### >> ', result?.param);
+        setParam(result?.param ?? '');
     };
     // ##############################################################################################
     // ##############################################################################################
@@ -265,8 +277,9 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 sessionId: sessionId,
                 lat: latitude,
                 lon: longitude,
-                param: null,
+                param: param,
             };
+            console.log('### answerMessage.request >>>> ', answerMessageReq);
             const response = (await dispatch(getAnswerMessage(answerMessageReq, pageKind))) as ChatRes | null;
             if (response) {
                 console.log('### answerMessage.response >>>> ', response);
@@ -295,8 +308,9 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 sessionId: sessionId,
                 lat: latitude,
                 lon: longitude,
-                param: null,
+                param: param,
             };
+            console.log('### suggestionMessage.request >>>> ', answerMessageReq);
             const response = (await dispatch(getSuggestionMessage(answerMessageReq, pageKind))) as ChatRes | null;
             if (response) {
                 console.log('### suggestionMessage.response >>>> ', response);
@@ -368,7 +382,20 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                             <div className="msg md">
                                                 <div>
                                                     <h4 className="title"> {msg.title}</h4>
-                                                    <h6 className="subtitle">서브타이틀</h6>
+                                                    <h6 className="subtitle">{msg.subtitle}</h6>
+                                                    {msg.image && (
+                                                        <img
+                                                            src={`${imgAddUrl}${msg.image}`}
+                                                            alt="message image"
+                                                            style={{
+                                                                width: 'fit-content',
+                                                                height: 'auto',
+                                                                display: 'block',
+                                                                marginTop: '8px',
+                                                                marginBottom: '8px',
+                                                            }}
+                                                        />
+                                                    )}
                                                     <ul>
                                                         {msg.content.split('\n').map((line, index) => (
                                                             <li>{line}</li>

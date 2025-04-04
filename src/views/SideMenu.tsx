@@ -30,6 +30,10 @@ const SideMenu = ({ isOpen, onClose, onTextScaleChange, pageKind }) => {
     };
 
     useEffect(() => {
+        setIsTextScaledUp(getBigFontTF());
+    }, []);
+
+    useEffect(() => {
         const handleResize = () => {
             if (typeof window !== 'undefined') {
                 setIsVisible(window.innerWidth >= 1000);
@@ -86,7 +90,7 @@ const SideMenu = ({ isOpen, onClose, onTextScaleChange, pageKind }) => {
                         </li>
                     )}
                     <li className="menu9">
-                        <button onClick={toggleTextScale}>{getBigFontTF() ? '글씨크기 축소' : '글씨크기 확대'}</button>
+                        <button onClick={toggleTextScale}>{isTextScaledUp ? '글씨크기 축소' : '글씨크기 확대'}</button>
                         {/* 글씨크기 확대 누르면 폰트크기 업(20px => 27px, 16px => 22px) */}
                     </li>
                 </ul>

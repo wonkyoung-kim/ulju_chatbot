@@ -20,7 +20,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isTextScaledUp, setIsTextScaledUp] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // 챗봇응답 로딩 상태
 
     const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -28,13 +28,13 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     const isInitialized = useRef(false);
     const [latitude, setLatitude] = useState(0); // 위도
     const [longitude, setLongitude] = useState(0); // 경도
-    const [param, setParam] = useState(''); // 답변으로 넘어온 param값값
+    const [param, setParam] = useState(''); // 답변으로 넘어온 param값
 
     const [showRecentSearch, setShowRecentSearch] = useState(false);
     const inputWrapperRef = useRef<HTMLDivElement>(null);
 
     const isLocal = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-    const imgAddUrl = isLocal ? 'https://uljusafe.uljudata.or.kr' : '';
+    const localAddUrl = isLocal ? 'https://uljusafe.uljudata.or.kr' : '';
     if (isLocal) {
         console.log('# local env #');
     }
@@ -136,6 +136,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 .map((b) => ({
                     title: b.title!,
                     uri: b.openUriAction!.uri!,
+                    type: b.openUriAction!.type!,
                 }));
             addMessage({
                 id: uuidv4(),
@@ -247,7 +248,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
         };
         addMessage(userMsg);
         //mutation.mutate(value);
-        setIsLoading(true);
+        setIsLoading(true); // 챗봇응답 로딩 상태 활성화
         answerMessage(value);
         if (inputRef.current) inputRef.current.value = '';
     };
@@ -314,7 +315,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 console.error('Failed to fetch answerMessage:', error);
             }
         } finally {
-            setIsLoading(false);
+            setIsLoading(false); // 챗봇응답 로딩 상태 비활성화
         }
     };
     // ##############################################################################################
@@ -347,7 +348,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                 console.error('Failed to fetch answerMessage:', error);
             }
         } finally {
-            setIsLoading(false);
+            setIsLoading(false); // 챗봇응답 로딩 상태 비활성화
         }
     };
     // ##############################################################################################
@@ -419,7 +420,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                                     <h6 className="subtitle">{msg.subtitle}</h6>
                                                     {msg.image && (
                                                         <img
-                                                            src={`${imgAddUrl}${msg.image}`}
+                                                            src={`${localAddUrl}${msg.image}`}
                                                             alt="message image"
                                                             style={{
                                                                 width: 'fit-content',
@@ -443,7 +444,14 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                                                     className="btn-default"
                                                                     key={i}
                                                                     onClick={() => {
-                                                                        btn.uri;
+                                                                        console.log('### btn.uri >>>> ', btn.uri);
+                                                                        if (btn.type === 'P') {
+                                                                            // pdf 인경우
+                                                                            window.open(`${localAddUrl}${btn.uri}`, '_blank');
+                                                                        } else {
+                                                                            // 일반 링크 인경우
+                                                                            btn.uri;
+                                                                        }
                                                                     }}
                                                                     // target="_blank"
                                                                     rel="noopener noreferrer"
@@ -472,7 +480,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                                                     timestamp: new Date().toISOString(),
                                                                 };
                                                                 addMessage(userMsg);
-                                                                setIsLoading(true);
+                                                                setIsLoading(true); // 챗봇응답 로딩 상태 활성화
                                                                 suggestionMessage(btn);
                                                             }}
                                                         >

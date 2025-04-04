@@ -34,8 +34,8 @@ export interface basicCard {
   buttons: button[];
 }
 export interface image {
-  imageUrl: string;
-  altText: string;
+  imageUri: string;
+  accessibilityText: string;
 }
 export interface button {
   openUriAction: openUriAction;
@@ -73,9 +73,11 @@ export interface ChatMessage {
   type: MessageType;
   content?: string;
   title?: string;
+  subtitle?: string;
   buttons?: { title: string; uri: string }[];
   button?: string[];
   image?: string;
+  imageAlt?: string;
   sender: 'user' | 'bot';
   timestamp: string;
 }

@@ -1,10 +1,9 @@
-'use client';
-
 import React, { useEffect, useRef, useState } from 'react';
+import '../styles/chatbot.css';
+import NoticePopup from 'components/popup/notice-popup';
+import SideMenu from './SideMenu';
 import { Box, Typography, Paper, TextField, IconButton, Button, Stack } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import { useChatStore } from '../store/chatStore';
-// import { useMutation } from '@tanstack/react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { dispatch } from 'store';
 
@@ -16,8 +15,13 @@ interface PageKindProps {
     pageKind: string | undefined;
 }
 
-export default function ChatbotHome({ pageKind }: PageKindProps) {
-    const inputRef = useRef<HTMLInputElement>();
+export default function ChatbotView({ pageKind }: PageKindProps) {
+    const [isNoticePopupOpen, setIsNoticePopupOpen] = useState(false);
+    const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(true);
+    const [isTextScaledUp, setIsTextScaledUp] = useState(false);
+
+    const inputRef = useRef<HTMLInputElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { messages, addMessage } = useChatStore();
     const isInitialized = useRef(false);
@@ -30,6 +34,50 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
     if (isLocal) {
         console.log('################ 로컬환경 ################');
     }
+
+    // 화면 크기 변경 감지 (1000px 미만일 때만 버튼 보이게)
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 1000);
+        };
+        if (typeof window !== 'undefined') {
+            setIsMobile(window.innerWidth < 1000);
+            window.addEventListener('resize', handleResize);
+        }
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // 사이드 메뉴 닫기
+    const closeSideMenu = () => {
+        setIsSideMenuOpen(false);
+    };
+
+    // marquee
+    const marqueeRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const [duration, setDuration] = useState(30);
+
+    useEffect(() => {
+        const updateAnimationDuration = () => {
+            if (marqueeRef.current && containerRef.current) {
+                const textWidth = marqueeRef.current.offsetWidth;
+                const containerWidth = containerRef.current.offsetWidth;
+                const speed = 100;
+                const newDuration = (textWidth + containerWidth) / speed;
+                setDuration(newDuration);
+            }
+        };
+
+        // updateAnimationDuration();
+        // window.addEventListener('resize', updateAnimationDuration);
+
+        // return () => window.removeEventListener('resize', updateAnimationDuration);
+        window.addEventListener('resize', updateAnimationDuration);
+        return () => {
+            window.removeEventListener('resize', updateAnimationDuration);
+        };
+    }, []);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -149,14 +197,14 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
         return () => window.removeEventListener('devicemotion', handleShake);
     }, []);
     /*
-  // 흔들기 감지 예시(아래의 코드를 콘솔에 입력하면 흔들기 감지 이벤트 발생) - 테스트용
-    window.dispatchEvent(new DeviceMotionEvent('devicemotion', {
-      acceleration: { x: 15, y: 15, z: 15 },
-      accelerationIncludingGravity: { x: 15, y: 15, z: 15 },
-      rotationRate: { alpha: 0, beta: 0, gamma: 0 },
-      interval: 16
-    }));
-  */
+    // 흔들기 감지 예시(아래의 코드를 콘솔에 입력하면 흔들기 감지 이벤트 발생) - 테스트용
+      window.dispatchEvent(new DeviceMotionEvent('devicemotion', {
+        acceleration: { x: 15, y: 15, z: 15 },
+        accelerationIncludingGravity: { x: 15, y: 15, z: 15 },
+        rotationRate: { alpha: 0, beta: 0, gamma: 0 },
+        interval: 16
+      }));
+    */
     // ##############################################################################################
     // ##############################################################################################
 
@@ -197,6 +245,7 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
             };
             const response = (await dispatch(getInitMessage(initMessageReq, pageKind))) as ChatRes | null;
             if (response) {
+                console.log('@@@@@@@@@@@@ >>>> ', response);
                 setResponseMessages(response.data?.result);
             }
         } catch (error) {
@@ -277,144 +326,160 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
     // ##############################################################################################
 
     return (
-        <Box>
-            <Typography variant="h6" gutterBottom>
-                울주군청 방사능 방재 챗봇
-            </Typography>
+        <>
+            {isMobile ? (
+                <SideMenu
+                    isOpen={isSideMenuOpen}
+                    onClose={closeSideMenu}
+                    onTextScaleChange={setIsTextScaledUp} // 글씨 크기 변경 함수 전달
+                />
+            ) : (
+                <SideMenu isOpen={true} onClose={closeSideMenu} onTextScaleChange={setIsTextScaledUp} />
+            )}
 
-            <Paper sx={{ height: '60vh', overflowY: 'auto', p: 2, mb: 2 }}>
-                {messages.map((msg) => (
-                    <Box key={msg.id} textAlign={msg.sender === 'user' ? 'right' : 'left'} mb={1}>
-                        {/* 심플 응답 메시지 */}
-                        {msg.type === 'text' && (
-                            <Paper
-                                elevation={1}
-                                sx={{
-                                    display: 'inline-block',
-                                    maxWidth: '80%',
-                                    px: 2,
-                                    py: 1,
-                                    backgroundColor: '#f9f9f9',
-                                    borderRadius: 2,
-                                }}
-                            >
-                                <Typography variant="body2" whiteSpace="pre-line">
-                                    {msg.content}
-                                </Typography>
-                            </Paper>
-                        )}
-
-                        {/* 기본 응답 메시지 */}
-                        {msg.type === 'card' && msg.title && msg.content && (
-                            <Paper
-                                elevation={1}
-                                sx={{
-                                    px: 2,
-                                    py: 1.5,
-                                    backgroundColor: '#f1f1f1',
-                                    borderRadius: 2,
-                                    maxWidth: '90%',
-                                    mt: 1,
-                                }}
-                            >
-                                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                                    {msg.title}
-                                </Typography>
-                                {msg.subtitle && (
-                                    <Typography variant="body2" fontSize="0.875rem" color="text.secondary" gutterBottom>
-                                        {msg.subtitle}
-                                    </Typography>
+            <main className="chatbot-container">
+                <div className="chatbot-content">
+                    {/* 공지 */}
+                    <div className="notice">
+                        <div className="marquee-text" ref={containerRef}>
+                            <p ref={marqueeRef} style={{ animationDuration: `${duration}s` }}>
+                                [알림] 휴대폰을 흔들거나 우상단 아이콘을 더블클릭하면 현재 위치에 해당되는 재난 정보를 확인 하실 수 있습니다.
+                            </p>
+                        </div>
+                        <button className="btn-noti" onClick={() => setIsNoticePopupOpen(true)}>
+                            <span className="blind">공지사항 열기</span>
+                        </button>
+                    </div>
+                    {/* 톡톡 */}
+                    <button className="toktok">
+                        <span className="blind">톡톡아이콘</span>
+                    </button>
+                    {/* 챗봇 윈도우 */}
+                    <div className={`chatbot-window${isTextScaledUp ? ' text-scaled-up' : ''}`}>
+                        {messages.map((msg) => (
+                            <>
+                                {msg.sender === 'user' && (
+                                    <div className="user-message">
+                                        {/* 심플 응답 메시지 */}
+                                        {msg.type === 'text' && (
+                                            <div>
+                                                <div className="msg">{msg.content}</div>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
-                                {msg.image && (
-                                    <img
-                                        src={`${imgAddUrl}${msg.image}`}
-                                        alt="message image"
-                                        style={{ maxWidth: '30%', width: 'fit-content', height: 'auto', display: 'block', marginTop: '8px' }}
-                                    />
+                                {msg.sender === 'bot' && (
+                                    <div className="bot-message">
+                                        {/* 심플 응답 메시지 */}
+                                        {msg.type === 'text' && (
+                                            <div>
+                                                <span className="name">안전 네비게이션</span>
+                                                <div className="msg">{msg.content}</div>
+                                            </div>
+                                        )}
+                                        {/* 기본 응답 메시지 */}
+                                        {msg.type === 'card' && msg.title && msg.content && (
+                                            <div className="msg md">
+                                                <div>
+                                                    <h4 className="title"> {msg.title}</h4>
+                                                    <h6 className="subtitle">{msg.subtitle}</h6>
+                                                    {msg.image && (
+                                                        <img
+                                                            src={`${imgAddUrl}${msg.image}`}
+                                                            alt="message image"
+                                                            style={{
+                                                                width: 'fit-content',
+                                                                height: 'auto',
+                                                                display: 'block',
+                                                                marginTop: '8px',
+                                                                marginBottom: '8px',
+                                                            }}
+                                                        />
+                                                    )}
+                                                    <ul>
+                                                        {msg.content.split('\n').map((line, index) => (
+                                                            <li>{line}</li>
+                                                        ))}
+                                                    </ul>
+                                                    {/* 버튼이 있을 경우 */}
+                                                    {msg.buttons && msg.buttons.length > 0 && (
+                                                        <div className="md">
+                                                            {msg.buttons.map((btn, i) => (
+                                                                <button
+                                                                    className="btn-default"
+                                                                    key={i}
+                                                                    onClick={() => {
+                                                                        btn.uri;
+                                                                    }}
+                                                                    // target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                >
+                                                                    {btn.title}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {/* 제안 키워드 */}
+                                        {msg.type === 'button' && (
+                                            <div className="msg sm">
+                                                <ul className="btn-list">
+                                                    {msg.button?.map((btn, i) => (
+                                                        <li
+                                                            key={i}
+                                                            onClick={() => {
+                                                                const userMsg: ChatMessage = {
+                                                                    id: uuidv4(),
+                                                                    type: 'text',
+                                                                    content: btn,
+                                                                    sender: 'user',
+                                                                    timestamp: new Date().toISOString(),
+                                                                };
+                                                                addMessage(userMsg);
+                                                                suggestionMessage(btn);
+                                                            }}
+                                                        >
+                                                            <button>{btn}</button>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
-                                <Typography variant="body2" whiteSpace="pre-line">
-                                    {msg.content}
-                                </Typography>
-                                {/* 버튼이 있을 경우 */}
-                                {msg.buttons && msg.buttons.length > 0 && (
-                                    <Box mt={1} display="flex" flexWrap="wrap" gap={1}>
-                                        {msg.buttons.map((btn, i) => (
-                                            <Button
-                                                key={i}
-                                                variant="outlined"
-                                                size="small"
-                                                href={btn.uri}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                sx={{ textTransform: 'none' }}
-                                            >
-                                                {btn.title || '열기'}
-                                            </Button>
-                                        ))}
-                                    </Box>
-                                )}
-                            </Paper>
-                        )}
+                            </>
+                        ))}
+                        <div ref={messagesEndRef} />
+                    </div>
 
-                        {/* 제안 키워드 */}
-                        {msg.type === 'button' && (
-                            <Box
-                                sx={{
-                                    mt: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '8px',
-                                    width: 'fit-content',
-                                    p: 1.5,
-                                    backgroundColor: '#f9f9f9',
-                                    borderRadius: 2,
-                                    boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-                                }}
-                            >
-                                {msg.button?.map((btn, i) => (
-                                    <Box
-                                        key={i}
-                                        onClick={() => {
-                                            const userMsg: ChatMessage = {
-                                                id: uuidv4(),
-                                                type: 'text',
-                                                content: btn,
-                                                sender: 'user',
-                                                timestamp: new Date().toISOString(),
-                                            };
-                                            addMessage(userMsg);
-                                            suggestionMessage(btn);
-                                        }}
-                                        sx={{
-                                            px: 1.5,
-                                            py: 0.5,
-                                            cursor: 'pointer',
-                                            fontSize: '0.875rem',
-                                            whiteSpace: 'nowrap',
-                                            userSelect: 'none',
-                                            width: 'fit-content',
-                                            borderRadius: 1,
-                                            '&:hover': {
-                                                backgroundColor: '#f1f1f1',
-                                            },
-                                        }}
-                                    >
-                                        {btn}
-                                    </Box>
-                                ))}
-                            </Box>
+                    {/* 최근 질의 */}
+                    <div className="recent-search">
+                        <ul className="list">
+                            <li>울산대병원 전화번호</li>
+                            <li>울산대병원 전화번호</li>
+                            <li>울산대병원 전화번호</li>
+                        </ul>
+                    </div>
+                    {/* 인풋창 */}
+                    <div className="chatbot-input">
+                        {/* 1000px 미만일 때만 "메뉴 열기" 버튼 보이게 */}
+                        {isMobile && (
+                            <button className={`btn-mo-menu ${isSideMenuOpen ? 'open' : ''}`} onClick={() => setIsSideMenuOpen(!isSideMenuOpen)}>
+                                {isSideMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+                            </button>
                         )}
-                    </Box>
-                ))}
-                <div ref={messagesEndRef} />
-            </Paper>
+                        <input type="text" ref={inputRef} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="내용을 입력해주세요." />
+                        <button className="btn-send" onClick={handleSend}>
+                            <span className="blind">보내기</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
 
-            <Stack direction="row" spacing={1}>
-                <TextField fullWidth inputRef={inputRef} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="메시지를 입력하세요" />
-                <IconButton onClick={handleSend}>
-                    <SendIcon />
-                </IconButton>
-            </Stack>
-        </Box>
+            {/* 공지사항 팝업 */}
+            <NoticePopup isOpen={isNoticePopupOpen} onClose={() => setIsNoticePopupOpen(false)} />
+        </>
     );
 }

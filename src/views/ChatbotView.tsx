@@ -35,7 +35,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     const isLocal = typeof window !== 'undefined' && window.location.hostname === 'localhost';
     const imgAddUrl = isLocal ? 'https://uljusafe.uljudata.or.kr' : '';
     if (isLocal) {
-        console.log('################ 로컬환경 ################');
+        console.log('# local env #');
     }
 
     // 글씨 크기 변경 여부 가져오기

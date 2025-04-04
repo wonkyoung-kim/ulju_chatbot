@@ -18,7 +18,7 @@ interface PageKindProps {
 export default function ChatbotView({ pageKind }: PageKindProps) {
     const [isNoticePopupOpen, setIsNoticePopupOpen] = useState(false);
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 1000);
+    const [isMobile, setIsMobile] = useState(true);
     const [isTextScaledUp, setIsTextScaledUp] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +33,10 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 1000);
         };
-        window.addEventListener('resize', handleResize);
+        if (typeof window !== 'undefined') {
+            setIsMobile(window.innerWidth < 1000);
+            window.addEventListener('resize', handleResize);
+        }
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -59,10 +62,14 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
             }
         };
 
-        updateAnimationDuration();
-        window.addEventListener('resize', updateAnimationDuration);
+        // updateAnimationDuration();
+        // window.addEventListener('resize', updateAnimationDuration);
 
-        return () => window.removeEventListener('resize', updateAnimationDuration);
+        // return () => window.removeEventListener('resize', updateAnimationDuration);
+        window.addEventListener('resize', updateAnimationDuration);
+        return () => {
+            window.removeEventListener('resize', updateAnimationDuration);
+        };
     }, []);
 
     const scrollToBottom = () => {
@@ -336,7 +343,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                     {/* 챗봇 윈도우 */}
                     <div className={`chatbot-window${isTextScaledUp ? ' text-scaled-up' : ''}`}>
                         {messages.map((msg) => (
-                            <div>
+                            <>
                                 {msg.sender === 'user' && (
                                     <div className="user-message">
                                         {/* 심플 응답 메시지 */}
@@ -415,7 +422,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                         )}
                                     </div>
                                 )}
-                            </div>
+                            </>
                         ))}
                         <div ref={messagesEndRef} />
                     </div>

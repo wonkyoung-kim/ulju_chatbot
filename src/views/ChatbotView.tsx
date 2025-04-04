@@ -385,7 +385,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                         }}
                     >
                         {messages.map((msg) => (
-                            <>
+                            <div key={msg.id}>
                                 {msg.sender === 'user' && (
                                     <div className="user-message">
                                         {/* 심플 응답 메시지 */}
@@ -426,7 +426,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                                     )}
                                                     <ul>
                                                         {msg.content.split('\n').map((line, index) => (
-                                                            <li>{line}</li>
+                                                            <li key={index}>{line}</li>
                                                         ))}
                                                     </ul>
                                                     {/* 버튼이 있을 경우 */}
@@ -477,7 +477,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                         )}
                                     </div>
                                 )}
-                            </>
+                            </div>
                         ))}
                         <div ref={messagesEndRef} />
                     </div>

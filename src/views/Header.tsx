@@ -1,6 +1,7 @@
 import React from 'react';
+import { Button } from '@mui/material';
 import { useState } from 'react';
-
+import { redirect } from 'next/navigation';
 import ImageUploadPopup from 'components/popup/image-upload-popup';
 import '../styles/header.css';
 
@@ -15,7 +16,9 @@ const Header = ({ pageKind }: PageKindProps) => {
         <>
             <header>
                 <h1>
-                    <span>안전</span>내비게이션
+                    <button onClick={() => (window.location.href = `/${pageKind}`)}>
+                        <span>안전</span>내비게이션
+                    </button>
                 </h1>
                 {pageKind === 'official' && (
                     <button className="btn-report" onClick={() => setIsImageUploadPopupOpen(true)}>

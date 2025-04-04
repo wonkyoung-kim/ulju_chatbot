@@ -1,86 +1,78 @@
-
 export type MessageType = 'text' | 'button' | 'image' | 'card';
 
 /* ############################################################ */
 /* ### [res] ################################################## */
 /* ############################################################ */
 export interface ChatRes {
-  code: number;
-  msg: string;
-  success: boolean;
-  data: {
-    result: resultResponses;
-  }
+    code: number;
+    msg: string;
+    success: boolean;
+    data: {
+        result: resultResponses;
+    };
 }
 export interface resultResponses {
-  simpleResponses: simpleResponses;
-  basicCard: basicCard[];
-  suggestions: {
-    suggestions: suggestions[];
-  };
-  param: string;
+    simpleResponses: simpleResponses;
+    basicCard: basicCard[];
+    suggestions: {
+        suggestions: suggestions[];
+    };
+    param: string;
 }
 export interface simpleResponses {
-  simpleResponses: textToSpeech[];
+    simpleResponses: textToSpeech[];
 }
 export interface textToSpeech {
-  textToSpeech: string;
+    textToSpeech: string;
 }
 export interface basicCard {
-  title: string;
-  subtitle: string;
-  formattedText: string;
-  image: image;
-  buttons: button[];
+    title: string;
+    subtitle: string;
+    formattedText: string;
+    image: image;
+    buttons: button[];
 }
 export interface image {
-  imageUri: string;
-  accessibilityText: string;
+    imageUri: string;
+    accessibilityText: string;
 }
 export interface button {
-  openUriAction: openUriAction;
-  title: string;
+    openUriAction: openUriAction;
+    title: string;
 }
 export interface openUriAction {
-  uri: string;
-  type: string;
+    uri: string;
+    type: string;
 }
 export interface suggestions {
-  title: string;
+    title: string;
 }
 
 /* ############################################################ */
 /* ### [req] ################################################## */
 /* ############################################################ */
 export interface ChatReq {
-  text: string | null;
-  sessionId: string | null;
-  lat: number | null;
-  lon: number | null;
-  param: string | null;
+    text: string | null;
+    sessionId: string | null;
+    lat: number | null;
+    lon: number | null;
+    param: string | null;
 }
-
-
 
 export interface ChatStateProps {
-  error: object | string | null;
+    error: object | string | null;
 }
-
-
 
 export interface ChatMessage {
-  id: string;
-  type: MessageType;
-  content?: string;
-  title?: string;
-  subtitle?: string;
-  buttons?: { title: string; uri: string }[];
-  button?: string[];
-  image?: string;
-  imageAlt?: string;
-  sender: 'user' | 'bot';
-  timestamp: string;
+    id: string;
+    type: MessageType;
+    content?: string;
+    title?: string;
+    subtitle?: string;
+    buttons?: { title: string; uri: string; type: string }[];
+    button?: string[];
+    image?: string;
+    imageAlt?: string;
+    sender: 'user' | 'bot';
+    timestamp: string;
 }
-
-
-

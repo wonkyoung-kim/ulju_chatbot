@@ -18,7 +18,7 @@ interface PageKindProps {
 export default function ChatbotView({ pageKind }: PageKindProps) {
     const [isNoticePopupOpen, setIsNoticePopupOpen] = useState(false);
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
     const [isTextScaledUp, setIsTextScaledUp] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -29,6 +29,9 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     const [longitude, setLongitude] = useState(0); // 경도
     const [param, setParam] = useState(''); // 답변으로 넘어온 param값값
 
+    const [showRecentSearch, setShowRecentSearch] = useState(false);
+    const inputWrapperRef = useRef<HTMLDivElement>(null);
+
     const isLocal = typeof window !== 'undefined' && window.location.hostname === 'localhost';
     const imgAddUrl = isLocal ? 'https://uljusafe.uljudata.or.kr' : '';
     if (isLocal) {
@@ -38,6 +41,20 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     // 글씨 크기 변경 여부 가져오기
     useEffect(() => {
         setIsTextScaledUp(getBigFontTF());
+    }, []);
+
+    // 입력창 외부 클릭 감지
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (inputWrapperRef.current && !inputWrapperRef.current.contains(event.target as Node)) {
+                setShowRecentSearch(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, []);
 
     // 화면 크기 변경 감지 (1000px 미만일 때만 버튼 보이게)
@@ -361,7 +378,12 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                         <span className="blind">톡톡아이콘</span>
                     </button>
                     {/* 챗봇 윈도우 */}
-                    <div className={`chatbot-window${isTextScaledUp ? ' text-scaled-up' : ''}`}>
+                    <div
+                        className={`chatbot-window${isTextScaledUp ? ' text-scaled-up' : ''}`}
+                        style={{
+                            paddingBottom: showRecentSearch ? '5.6rem' : undefined,
+                        }}
+                    >
                         {messages.map((msg) => (
                             <>
                                 {msg.sender === 'user' && (
@@ -378,10 +400,10 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                     <div className="bot-message">
                                         {/* 심플 응답 메시지 */}
                                         {msg.type === 'text' && (
-                                            <div>
+                                            <>
                                                 <span className="name">안전 네비게이션</span>
                                                 <div className="msg">{msg.content}</div>
-                                            </div>
+                                            </>
                                         )}
                                         {/* 기본 응답 메시지 */}
                                         {msg.type === 'card' && msg.title && msg.content && (
@@ -461,22 +483,44 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                     </div>
 
                     {/* 최근 질의 */}
-                    <div className="recent-search">
-                        <ul className="list">
-                            <li>울산대병원 전화번호</li>
-                            <li>울산대병원 전화번호</li>
-                            <li>울산대병원 전화번호</li>
-                        </ul>
-                    </div>
+                    {showRecentSearch && (
+                        <div className="recent-search">
+                            <ul className="list">
+                                <li>
+                                    <button>울산대병원 전화번호</button>
+                                </li>
+                                <li>
+                                    <button>울산대병원 전화번호</button>
+                                </li>
+                                <li>
+                                    <button>울산대병원 전화번호</button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                     {/* 인풋창 */}
-                    <div className="chatbot-input">
+                    <div className="chatbot-input" ref={inputWrapperRef}>
                         {/* 1000px 미만일 때만 "메뉴 열기" 버튼 보이게 */}
                         {isMobile && (
                             <button className={`btn-mo-menu ${isSideMenuOpen ? 'open' : ''}`} onClick={() => setIsSideMenuOpen(!isSideMenuOpen)}>
                                 {isSideMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
                             </button>
                         )}
-                        <input type="text" ref={inputRef} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="내용을 입력해주세요." />
+                        <input
+                            type="text"
+                            ref={inputRef}
+                            onClick={() => setShowRecentSearch(true)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleSend();
+                                    setShowRecentSearch(false); // 엔터 눌렀을 때 최근 검색 닫기
+                                }
+                            }}
+                            onChange={(e) => {
+                                setShowRecentSearch(e.target.value.trim().length > 0);
+                            }}
+                            placeholder="내용을 입력해주세요."
+                        />
                         <button className="btn-send" onClick={handleSend}>
                             <span className="blind">보내기</span>
                         </button>

@@ -10,7 +10,7 @@ import { dispatch } from 'store';
 import { getInitMessage, getAnswerMessage, getSuggestionMessage } from 'data/chat';
 import { ChatReq, ChatRes, ChatStateProps, ChatMessage, resultResponses } from 'model/Message';
 import { initMessageQuery } from 'constants/constant';
-import { setUljusafeSessionId, getUljusafeSessionId, addSearchText, getSearchTextList } from 'common/local-storage';
+import { setUljusafeSessionId, getUljusafeSessionId, addSearchText, getSearchTextList, getBigFontTF } from 'common/local-storage';
 interface PageKindProps {
     pageKind: string | undefined;
 }
@@ -34,6 +34,11 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
     if (isLocal) {
         console.log('################ 로컬환경 ################');
     }
+
+    // 글씨 크기 변경 여부 가져오기
+    useEffect(() => {
+        setIsTextScaledUp(getBigFontTF());
+    }, []);
 
     // 화면 크기 변경 감지 (1000px 미만일 때만 버튼 보이게)
     useEffect(() => {
@@ -332,9 +337,10 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                     isOpen={isSideMenuOpen}
                     onClose={closeSideMenu}
                     onTextScaleChange={setIsTextScaledUp} // 글씨 크기 변경 함수 전달
+                    pageKind={pageKind} // 페이지 종류(citizen, official)
                 />
             ) : (
-                <SideMenu isOpen={true} onClose={closeSideMenu} onTextScaleChange={setIsTextScaledUp} />
+                <SideMenu isOpen={true} onClose={closeSideMenu} onTextScaleChange={setIsTextScaledUp} pageKind={pageKind} />
             )}
 
             <main className="chatbot-container">

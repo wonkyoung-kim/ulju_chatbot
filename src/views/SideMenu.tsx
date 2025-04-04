@@ -5,10 +5,11 @@ import EducationPopup from 'components/popup/education-popup';
 import SchedulePopup from 'components/popup/schedule-popup';
 import SummaryDownloadPopup from 'components/popup/summary-download-popup';
 import CalamityDownloadPopup from 'components/popup/calamity-download-popup';
+import { setBigFontTF, getBigFontTF } from 'common/local-storage';
 
 import '../styles/sidemenu.css';
 
-const SideMenu = ({ isOpen, onClose, onTextScaleChange }) => {
+const SideMenu = ({ isOpen, onClose, onTextScaleChange, pageKind }) => {
     const [isEducationPopupOpen, setIsEducationPopupOpen] = useState(false);
     const [isSchedulePopupOpen, setIsSchedulePopupOpen] = useState(false);
     const [isSummaryDownloadPopupOpen, setIsSummaryDownloadPopupOpen] = useState(false);
@@ -19,11 +20,12 @@ const SideMenu = ({ isOpen, onClose, onTextScaleChange }) => {
     const [isTextScaledUp, setIsTextScaledUp] = useState(false);
 
     const toggleTextScale = () => {
-        const newState = !isTextScaledUp;
+        const newState = !getBigFontTF(); // 큰폰트 여부 가져오기
         setIsTextScaledUp(newState);
         console.log('토글 버튼 클릭됨, 새로운 상태:', newState); // ✅ 상태 변경 확인
         if (typeof onTextScaleChange === 'function') {
             onTextScaleChange(newState);
+            setBigFontTF(newState); // 글씨 크기 변경 여부 저장
         }
     };
 
@@ -78,11 +80,13 @@ const SideMenu = ({ isOpen, onClose, onTextScaleChange }) => {
                     <li className="menu7">
                         <button onClick={() => setIsCalamityDownloadPopupOpen(true)}>사회재난 피해신고</button>
                     </li>
-                    <li className="menu8">
-                        <button>이재민 사전등록</button>
-                    </li>
+                    {pageKind === 'citizen' && (
+                        <li className="menu8">
+                            <button>이재민 사전등록</button>
+                        </li>
+                    )}
                     <li className="menu9">
-                        <button onClick={toggleTextScale}>{isTextScaledUp ? '글씨크기 축소' : '글씨크기 확대'}</button>
+                        <button onClick={toggleTextScale}>{getBigFontTF() ? '글씨크기 축소' : '글씨크기 확대'}</button>
                         {/* 글씨크기 확대 누르면 폰트크기 업(20px => 27px, 16px => 22px) */}
                     </li>
                 </ul>

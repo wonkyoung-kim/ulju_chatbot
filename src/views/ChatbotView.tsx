@@ -385,7 +385,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                         }}
                     >
                         {messages.map((msg) => (
-                            <div key={msg.id}>
+                            <React.Fragment key={msg.id}>
                                 {msg.sender === 'user' && (
                                     <div className="user-message">
                                         {/* 심플 응답 메시지 */}
@@ -477,7 +477,7 @@ export default function ChatbotView({ pageKind }: PageKindProps) {
                                         )}
                                     </div>
                                 )}
-                            </div>
+                            </React.Fragment>
                         ))}
                         <div ref={messagesEndRef} />
                     </div>

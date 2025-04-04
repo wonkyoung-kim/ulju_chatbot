@@ -77,6 +77,10 @@
     padding: 1.2rem;
     overflow-y: auto;
     background: #ffffff;
+    -ms-overflow-style: none;
+}
+.chatbot-container .chatbot-window::-webkit-scrollbar {
+    display: none;
 }
 .chatbot-container .chatbot-window .bot-message {
     display: flex;
@@ -214,15 +218,19 @@
 }
 .chatbot-container .recent-search li {
     flex: 1;
-    padding: 0.8rem;
     border-radius: 0.8rem;
-    text-align: center;
-    font-size: 1.6rem;
-    color: #333333;
     background-color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.chatbot-container .recent-search li button {
+    width: 100%;
+    height: 100%;
+    padding: 0.8rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #333333;
 }
 .chatbot-container .btn-mo-menu {
     flex-shrink: 0;

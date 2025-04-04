@@ -8,7 +8,7 @@ import CalamityDownloadPopup from 'components/popup/calamity-download-popup';
 
 import '../styles/sidemenu.css';
 
-const SideMenu = ({ isOpen, onClose, onTextScaleChange }) => {
+const SideMenu = ({ isOpen, onClose, onTextScaleChange, pageKind }) => {
     const [isEducationPopupOpen, setIsEducationPopupOpen] = useState(false);
     const [isSchedulePopupOpen, setIsSchedulePopupOpen] = useState(false);
     const [isSummaryDownloadPopupOpen, setIsSummaryDownloadPopupOpen] = useState(false);
@@ -78,9 +78,11 @@ const SideMenu = ({ isOpen, onClose, onTextScaleChange }) => {
                     <li className="menu7">
                         <button onClick={() => setIsCalamityDownloadPopupOpen(true)}>사회재난 피해신고</button>
                     </li>
-                    <li className="menu8">
-                        <button>이재민 사전등록</button>
-                    </li>
+                    {pageKind === 'citizen' && (
+                        <li className="menu8">
+                            <button>이재민 사전등록</button>
+                        </li>
+                    )}
                     <li className="menu9">
                         <button onClick={toggleTextScale}>{isTextScaledUp ? '글씨크기 축소' : '글씨크기 확대'}</button>
                         {/* 글씨크기 확대 누르면 폰트크기 업(20px => 27px, 16px => 22px) */}

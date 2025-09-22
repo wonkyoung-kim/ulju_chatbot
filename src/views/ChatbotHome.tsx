@@ -65,6 +65,7 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
                 .map((b) => ({
                     title: b.title!,
                     uri: b.openUriAction!.uri!,
+                    type: 'web_url',
                 }));
             addMessage({
                 id: uuidv4(),

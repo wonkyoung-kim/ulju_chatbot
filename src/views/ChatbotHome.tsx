@@ -16,6 +16,12 @@ interface PageKindProps {
     pageKind: string | undefined;
 }
 
+type Button = {
+  title: string;
+  uri: string;
+  type: string; // 필수
+};
+
 export default function ChatbotHome({ pageKind }: PageKindProps) {
     const inputRef = useRef<HTMLInputElement>();
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -60,7 +66,7 @@ export default function ChatbotHome({ pageKind }: PageKindProps) {
         // 기본 응답 메시지
         const cards = result?.basicCard ?? [];
         cards.forEach((card) => {
-            const validButtons = (card.buttons ?? [])
+            const validButtons: Button[] = (card.buttons ?? [])
                 .filter((b) => b.title && b.openUriAction?.uri && !b.openUriAction.uri.startsWith('null'))
                 .map((b) => ({
                     title: b.title!,
